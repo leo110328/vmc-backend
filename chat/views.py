@@ -29,15 +29,26 @@ def query_chat_object(request):
     if not page_params_verify(request) is None:
         return page_params_verify(request)
 
-    sql = " SELECT t1.* FROM chat_msg_info t1 INNER JOIN (  select id,max(timestamp) as timestamp from chat_msg_info  where send_id = '{0}' or accept_id = '{1}'  group by accept_id ) t2  on  t1.timestamp = t2.timestamp order by timestamp".format(
-        user_id, user_id)
-    if settings.DEBUG:
-        print("查询聊天对象，sql = %s" % sql)
-    roles = MsgInfo.objects.raw(sql)
+    sql = """
+    SELECT t1.* FROM chat_msg_info t1
+    INNER JOIN (
+        SELECT MAX(id) as max_id
+        FROM chat_msg_info
+        WHERE send_id = %s OR accept_id = %s
+        GROUP BY 
+            CASE 
+                WHEN send_id = %s THEN accept_id
+                ELSE send_id
+            END
+    ) t2 ON t1.id = t2.max_id
+    ORDER BY t1.timestamp DESC
+    """
+    
+    roles = MsgInfo.objects.raw(sql, [user_id, user_id, user_id])
+    
     page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)
     roles_ser = MsgInfoSerializer(page_roles, many=True)
     return ok_page(request, roles.__len__(), roles_ser.data)
-
 
 @api_view(['POST'])
 def query_page(request):
