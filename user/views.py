@@ -88,8 +88,8 @@ def add(request):
     code = cache.get(code_key)
     print(code)
     print("用户输入的验证码=" + data["code"])
-    if code is None or code != data["code"]:
-        return error("验证码错误")
+    # if code is None or code != data["code"]:
+    #     return error("验证码错误")
     username = data["username"]
     emails = data["email"]
     phone = data["phone"]
