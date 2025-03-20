@@ -1,7 +1,7 @@
 # redis配置
 redis_conf_localhost = "localhost"
-# redis_conf_password = "Spinfo@0123"
-redis_conf_password = ""
+redis_conf_password = "Spinfo@0123"
+# redis_conf_password = ""
 redis_conf_port = "6379"
 redis_conf_dbname = "0"
 # 缓存超时事件,单位:秒
@@ -10,8 +10,8 @@ redis_conf_cache_time = 60 * 60 * 8
 # mysql配置
 mysql_conf_localhost = "localhost"
 mysql_conf_username = "root"
-mysql_conf_password = ""
-# mysql_conf_password = "QAZwsx123..MySql"
+# mysql_conf_password = ""
+mysql_conf_password = "QAZwsx123..MySql"
 mysql_conf_port = "3306"
 mysql_conf_dbname = "db1"
 
