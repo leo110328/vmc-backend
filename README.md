@@ -152,3 +152,68 @@ A default admin user is automatically created when you start the application:
 - MySQL data is stored in the `mysql_data` volume
 - Redis data is stored in the `redis_data` volume
 - Application file uploads are stored in the `./data` directory which is mounted to `/opt/data` in the container 
+
+## Troubleshooting Database Migration Issues
+
+When starting the application with Docker Compose for the first time, you might encounter database migration errors such as:
+- `Table 'questionnaire_score_info' already exists`
+- `Table 'db1.user_info' doesn't exist`
+
+These issues occur due to inconsistencies in the migration state. Here are several solutions:
+
+### Solution 1: Reset Database (For Development Environment)
+
+If you don't need to preserve data, the simplest solution is to reset the database:
+
+```bash
+# Stop containers
+docker-compose down
+
+# Remove MySQL volume (WARNING: This will delete all data!)
+docker volume rm vmc-backend_mysql_data
+
+# Start again
+docker-compose up -d
+```
+
+### Solution 2: Use the Robust Migration Script
+
+For preserving data while fixing migration issues, use the robust migration scripts included in the repository:
+
+```bash
+# Ensure scripts are executable
+chmod +x robust_migrations.py fix_questionnaire_score.py fix_migrations.sh
+
+# Run the fix script
+docker-compose exec app ./fix_migrations.sh
+```
+
+### Solution 3: Manual Migration Fixes
+
+You can also manually fix specific migration issues:
+
+```bash
+# Connect to the application container
+docker-compose exec app bash
+
+# Inside the container, run these commands:
+# For tables that already exist but need migration records
+python manage.py migrate questionnaire_score --fake
+
+# For missing tables that depend on existing tables
+python manage.py migrate user --fake-initial
+
+# Exit the container
+exit
+```
+
+### Prevention Measures
+
+To prevent migration issues in the future:
+
+1. **Avoid manual database schema changes** - Let Django handle all migrations
+2. **Backup your database** before major updates
+3. **Use the robust migrations script** in `docker-entrypoint.sh`
+4. **Create separate volumes** for development and production environments
+
+If you frequently encounter migration issues, consider adding these scripts to your deployment workflow. 

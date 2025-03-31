@@ -20,6 +20,10 @@ COPY . .
 RUN chmod +x docker-entrypoint.sh
 RUN chmod +x run.sh
 RUN chmod +x init_db.py
+RUN chmod +x insert_admin.py
+RUN chmod +x robust_migrations.py
+RUN chmod +x fix_questionnaire_score.py
+RUN chmod +x fix_migrations.sh
 
 # Create data directory for file uploads
 RUN mkdir -p /opt/data
