@@ -56,7 +56,9 @@ def add(request):
         return error("chicken_seedlings_volume3 不能為空")
     info = get_mxa_version_data(user_id)
     data_version = '0' if info is None else info.data_version
-    uuid = get_uuid_str() if info is None else info.id
+    
+    # 修复: 始终生成新的UUID，而不是重用旧ID
+    uuid = get_uuid_str()
 
     FarmHomeInfo.objects.create(id=uuid, user_id=user_id, breeding_quota=data["breedingQuota"],
                                 chicken_seedlings_type=data["chickenSeedlingsType"],

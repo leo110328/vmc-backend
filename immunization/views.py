@@ -60,7 +60,10 @@ def add(request):
         return error("疫苗制造地 不能為空")
     info = get_mxa_version_data(user_id, data["dataTime"])
     data_version = '0' if info is None else info.data_version
-    uuid = get_uuid_str() if info is None else info.id
+    
+    # 修复：始终生成新的UUID，不重用现有ID
+    uuid = get_uuid_str()
+    
     ImmunizationInfo.objects.create(id=uuid, user_id=user_id, period_validity=data["periodValidity"],
                                     vaccine_name=data["vaccineName"],
                                     vaccine_type=data["vaccineType"],

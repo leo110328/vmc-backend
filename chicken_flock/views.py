@@ -75,7 +75,8 @@ def update(request):
     if info.status == '0':
         return error("鸡群已关闭,无法编辑")
     data_version = '0' if info is None else info.data_version
-    uuid = get_uuid_str() if info is None else info.id
+    # 修复: 始终生成新的UUID，而不是重用现有ID
+    uuid = get_uuid_str()
     ChickenFlockInfo.objects.create(id=uuid, user_id=user_id, batch_name=data["batchName"],
                                     incubation_date=data["incubationDate"],
                                     chicken_seedling_number=data["chickenSeedlingNumber"],

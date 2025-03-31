@@ -54,7 +54,8 @@ def add(request):
         return error("dataTime 不能為空")
     info = get_mxa_version_data(user_id, data["dataTime"])
     data_version = '0' if info is None else info.data_version
-    uuid = get_uuid_str() if info is None else info.id
+    # 修复: 始终生成新的UUID，而不是重用现有ID
+    uuid = get_uuid_str()
     NormalFeedDosageInfo.objects.create(id=uuid, user_id=user_id,
                                         chicken_seed_fine_feed_dosage=data["chickenSeedFineFeedDosage"],
                                         chicken_develop_fine_feed_dosage=data["chickenDevelopFineFeedDosage"],

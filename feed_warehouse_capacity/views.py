@@ -61,7 +61,8 @@ def add(request):
         return error("dataTime 不能為空")
     info = get_mxa_version_data(user_id, data["dataTime"])
     data_version = '0' if info is None else info.data_version
-    uuid = get_uuid_str() if info is None else info.id
+    # 修复: 始终生成新的UUID，而不是重用现有ID
+    uuid = get_uuid_str()
     FeedWarehouseCapacityInfo.objects.create(id=uuid, user_id=user_id,
                                              mixed_feed_frequency=data["mixedFeedFrequency"],
                                              mixed_feed_containers_frequency=data["mixedFeedContainersFrequency"],

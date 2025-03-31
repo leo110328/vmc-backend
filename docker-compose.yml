@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: vmc-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/opt/vmc-backend
+      - ./data:/opt/data
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - MYSQL_HOST=mysql
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+    command: ["/bin/bash", "docker-entrypoint.sh"]
+
+  mysql:
+    image: mysql:8.0
+    container_name: vmc-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: QAZwsx123..MySql
+      MYSQL_DATABASE: db1
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  redis:
+    image: redis:7.0
+    container_name: vmc-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass Spinfo@0123
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mysql_data:
+  redis_data: 

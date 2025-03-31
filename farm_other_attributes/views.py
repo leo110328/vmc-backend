@@ -66,7 +66,8 @@ def add(request):
 
     info = get_mxa_version_data(data["farmId"], data["dataTime"],data)
     data_version = '0' if info is None else info.data_version
-    uuid = get_uuid_str() if info is None else info.id
+    # 修复: 始终生成新的UUID，而不是重用现有ID
+    uuid = get_uuid_str()
     FarmOtherAttributesInfo.objects.create(id=uuid, user_id=user_id, farm_id=data["farmId"],
                                            sensitive=data["sensitive"],
                                            intermediate=data["intermediate"],

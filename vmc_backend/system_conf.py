@@ -1,5 +1,7 @@
+import os
+
 # redis配置
-redis_conf_localhost = "localhost"
+redis_conf_localhost = os.environ.get("REDIS_HOST", "localhost")
 redis_conf_password = "Spinfo@0123"
 # redis_conf_password = ""
 redis_conf_port = "6379"
@@ -8,7 +10,7 @@ redis_conf_dbname = "0"
 redis_conf_cache_time = 60 * 60 * 8
 
 # mysql配置
-mysql_conf_localhost = "localhost"
+mysql_conf_localhost = os.environ.get("MYSQL_HOST", "localhost")
 mysql_conf_username = "root"
 # mysql_conf_password = ""
 mysql_conf_password = "QAZwsx123..MySql"
