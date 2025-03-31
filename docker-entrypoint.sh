@@ -18,9 +18,9 @@ echo "Redis is ready!"
 echo "Installing required packages..."
 apt-get update && apt-get install -y netcat-openbsd
 
-# Initialize database with all migrations
-echo "Initializing database..."
-python init_db.py
+# 使用强健的迁移脚本初始化数据库
+echo "执行强健的数据库迁移..."
+python robust_migrations.py
 
 # Create admin user
 echo "Creating/updating admin user..."
